@@ -19,6 +19,7 @@ import SwiftUI
 @MainActor
 public struct PasswordRecoveryView {
   @Environment(AuthService.self) private var authService
+  @Environment(\.reportError) private var reportError
   @State private var email = ""
   @State private var showSuccessSheet = false
   @State private var sentEmail = ""
@@ -31,7 +32,7 @@ public struct PasswordRecoveryView {
       sentEmail = email
       showSuccessSheet = true
     } catch {
-      // Error already displayed via modal by AuthService
+      reportError?(error)
     }
   }
 }
