@@ -216,13 +216,14 @@ func authEmulatorCandidateProjectIDs(preferredProjectID: String? = nil,
 
     for candidateProjectID in candidateProjectIDs {
       let oobURL = URL(string: "\(base)/emulator/v1/projects/\(candidateProjectID)/oobCodes")!
-      let (oobData, oobResp) = try await URLSession.shared.data(from: oobURL)
-      guard (oobResp as? HTTPURLResponse)?.statusCode == 200 else {
-        throw NSError(domain: "EmulatorError", code: 2,
-                      userInfo: [NSLocalizedDescriptionKey: "Failed to fetch OOB codes"])
+      guard let (oobData, oobResp) = try? await URLSession.shared.data(from: oobURL),
+            (oobResp as? HTTPURLResponse)?.statusCode == 200 else {
+        continue
       }
 
-      let envelope = try JSONDecoder().decode(OobEnvelope.self, from: oobData)
+      guard let envelope = try? JSONDecoder().decode(OobEnvelope.self, from: oobData) else {
+        continue
+      }
 
       let iso = ISO8601DateFormatter()
       codeItem = envelope.oobCodes

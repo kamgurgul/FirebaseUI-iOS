@@ -498,10 +498,14 @@ private func getLastSmsCode(specificPhone: String? = nil) async throws -> String
         continue
       }
 
-      let (data, _) = try await URLSession.shared.data(from: url)
+      guard let (data, _) = try? await URLSession.shared.data(from: url) else {
+        continue
+      }
 
       let decoder = JSONDecoder()
-      let codesResponse = try decoder.decode(VerificationCodesResponse.self, from: data)
+      guard let codesResponse = try? decoder.decode(VerificationCodesResponse.self, from: data) else {
+        continue
+      }
 
       guard let codes = codesResponse.verificationCodes, !codes.isEmpty else {
         continue
