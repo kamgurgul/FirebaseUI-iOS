@@ -118,7 +118,6 @@ func createEmail() -> String {
 
 private let authEmulatorProjectIDs = [
   "flutterfire-e2e-tests",
-  "extensions-testing",
 ]
 
 private func projectIDFromIDToken(_ idToken: String) -> String? {
