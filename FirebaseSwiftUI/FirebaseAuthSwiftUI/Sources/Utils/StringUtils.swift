@@ -63,7 +63,24 @@ public class StringUtils {
     }
 
     // Fall back to the package's default strings
-    return String(localized: keyLocale, bundle: fallbackBundle)
+    let fallbackString = String(localized: keyLocale, bundle: fallbackBundle)
+    if fallbackString != key {
+      return fallbackString
+    }
+
+    // Last-resort: explicitly look up the English translation. `String(localized:bundle:)`
+    // is supposed to fall back to the bundle's development region, but on some host apps
+    // (e.g. when the device locale isn't in the bundle's `.lproj` list at all) the lookup
+    // returns the key itself, leaving raw keys visible in the UI.
+    if let enPath = fallbackBundle.path(forResource: "en", ofType: "lproj"),
+       let enBundle = Bundle(path: enPath) {
+      let englishString = enBundle.localizedString(forKey: key, value: nil, table: "Localizable")
+      if englishString != key {
+        return englishString
+      }
+    }
+
+    return fallbackString
   }
 
   public func localizedErrorMessage(for error: Error) -> String {
