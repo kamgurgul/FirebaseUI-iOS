@@ -143,7 +143,10 @@ extension AuthPickerView: View {
           Image(authService.configuration.logo ?? Assets.firebaseAuthLogo)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 100, height: 100)
+            .frame(
+              width: authService.configuration.logoSize.width,
+              height: authService.configuration.logoSize.height
+            )
           if authService.emailPasswordSignInEnabled {
             EmailAuthView()
           }

@@ -18,6 +18,7 @@ import SwiftUI
 
 public struct AuthConfiguration {
   public let logo: ImageResource?
+  public let logoSize: CGSize
   public let languageCode: String?
   public let shouldHideCancelButton: Bool
   public let interactiveDismissEnabled: Bool
@@ -36,6 +37,7 @@ public struct AuthConfiguration {
   public let mfaIssuer: String
 
   public init(logo: ImageResource? = nil,
+              logoSize: CGSize = CGSize(width: 100, height: 100),
               languageCode: String? = nil,
               shouldHideCancelButton: Bool = false,
               interactiveDismissEnabled: Bool = true,
@@ -50,6 +52,7 @@ public struct AuthConfiguration {
               allowedSecondFactors: Set<SecondFactorType> = [.sms, .totp],
               mfaIssuer: String = "Firebase Auth") {
     self.logo = logo
+    self.logoSize = logoSize
     self.shouldHideCancelButton = shouldHideCancelButton
     self.interactiveDismissEnabled = interactiveDismissEnabled
     self.shouldAutoUpgradeAnonymousUsers = shouldAutoUpgradeAnonymousUsers
