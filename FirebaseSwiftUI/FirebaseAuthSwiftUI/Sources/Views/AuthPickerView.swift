@@ -38,9 +38,10 @@ extension AuthPickerView: View {
         @Bindable var navigator = authService.navigator
         NavigationStack(path: $navigator.routes) {
           authPickerViewInternal
-            .navigationTitle(authService.authenticationState == .unauthenticated ? authService
-              .string.authPickerTitle : "")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle(currentPickerTitle)
+            .navigationBarTitleDisplayMode(
+              authService.configuration.pickerTitle == nil ? .large : .inline
+            )
             .toolbar {
               toolbar
             }
@@ -95,6 +96,11 @@ extension AuthPickerView: View {
     }
   }
 
+  private var currentPickerTitle: String {
+    guard authService.authenticationState == .unauthenticated else { return "" }
+    return authService.configuration.pickerTitle ?? authService.string.authPickerTitle
+  }
+
   @ToolbarContentBuilder
   var toolbar: some ToolbarContent {
     ToolbarItem(placement: .topBarTrailing) {
@@ -143,7 +149,10 @@ extension AuthPickerView: View {
           Image(authService.configuration.logo ?? Assets.firebaseAuthLogo)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 100, height: 100)
+            .frame(
+              width: authService.configuration.logoSize.width,
+              height: authService.configuration.logoSize.height
+            )
           if authService.emailPasswordSignInEnabled {
             EmailAuthView()
           }
