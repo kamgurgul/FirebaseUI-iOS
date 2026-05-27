@@ -38,9 +38,10 @@ extension AuthPickerView: View {
         @Bindable var navigator = authService.navigator
         NavigationStack(path: $navigator.routes) {
           authPickerViewInternal
-            .navigationTitle(authService.authenticationState == .unauthenticated ? authService
-              .string.authPickerTitle : "")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle(currentPickerTitle)
+            .navigationBarTitleDisplayMode(
+              authService.configuration.pickerTitle == nil ? .large : .inline
+            )
             .toolbar {
               toolbar
             }
@@ -93,6 +94,11 @@ extension AuthPickerView: View {
         underlyingError: error
       )
     }
+  }
+
+  private var currentPickerTitle: String {
+    guard authService.authenticationState == .unauthenticated else { return "" }
+    return authService.configuration.pickerTitle ?? authService.string.authPickerTitle
   }
 
   @ToolbarContentBuilder

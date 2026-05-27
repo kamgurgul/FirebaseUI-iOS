@@ -19,6 +19,10 @@ import SwiftUI
 public struct AuthConfiguration {
   public let logo: ImageResource?
   public let logoSize: CGSize
+  /// Overrides the navigation title of `AuthPickerView`. When `nil` the default
+  /// localized title ("Sign in with Firebase") is used. Pass an empty string to
+  /// hide the title text.
+  public let pickerTitle: String?
   public let languageCode: String?
   public let shouldHideCancelButton: Bool
   public let interactiveDismissEnabled: Bool
@@ -38,6 +42,7 @@ public struct AuthConfiguration {
 
   public init(logo: ImageResource? = nil,
               logoSize: CGSize = CGSize(width: 100, height: 100),
+              pickerTitle: String? = nil,
               languageCode: String? = nil,
               shouldHideCancelButton: Bool = false,
               interactiveDismissEnabled: Bool = true,
@@ -53,6 +58,7 @@ public struct AuthConfiguration {
               mfaIssuer: String = "Firebase Auth") {
     self.logo = logo
     self.logoSize = logoSize
+    self.pickerTitle = pickerTitle
     self.shouldHideCancelButton = shouldHideCancelButton
     self.interactiveDismissEnabled = interactiveDismissEnabled
     self.shouldAutoUpgradeAnonymousUsers = shouldAutoUpgradeAnonymousUsers
