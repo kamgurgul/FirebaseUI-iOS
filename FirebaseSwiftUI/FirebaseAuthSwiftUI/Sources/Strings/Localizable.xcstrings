@@ -39405,6 +39405,12 @@
             "state" : "translated",
             "value" : "En continuant, tu indiques que tu acceptes nos %@ et notre %@."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontynuując, akceptujesz nasze %@ oraz %@."
+          }
         }
       }
     },

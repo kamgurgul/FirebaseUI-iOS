@@ -42,21 +42,21 @@ struct PrivacyTOCsView {
       ? authService.string.termsOfServiceMessage
       : "%@    %@"
 
-    let fullText = String(format: format, tosText, privacyText)
+    let markdown = String(
+      format: format,
+      "[\(tosText)](\(tosURL.absoluteString))",
+      "[\(privacyText)](\(privacyURL.absoluteString))"
+    )
 
-    var attributed = AttributedString(fullText)
-
-    if let tosRange = attributed.range(of: tosText) {
-      attributed[tosRange].link = tosURL
-      attributed[tosRange].foregroundColor = .blue
+    if let attributed = try? AttributedString(
+      markdown: markdown,
+      options: AttributedString.MarkdownParsingOptions(
+        interpretedSyntax: .inlineOnlyPreservingWhitespace
+      )
+    ) {
+      return attributed
     }
-
-    if let privacyRange = attributed.range(of: privacyText) {
-      attributed[privacyRange].link = privacyURL
-      attributed[privacyRange].foregroundColor = .blue
-    }
-
-    return attributed
+    return AttributedString(String(format: format, tosText, privacyText))
   }
 }
 
@@ -67,6 +67,7 @@ extension PrivacyTOCsView: View {
          let privacyURL = authService.configuration.privacyPolicyUrl {
         Text(attributedMessage(tosURL: tosURL, privacyURL: privacyURL))
           .multilineTextAlignment(displayMode == .full ? .center : .trailing)
+          .tint(.blue)
           .padding()
       } else {
         EmptyView()
